@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promo Code Management System</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --light-bg: #f8f9fa;
+            --border-color: #e1e4e8;
+            --text-primary: #2c3e50;
+            --text-secondary: #6c757d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-icon {
+            background: var(--secondary-color);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .role-badge {
+            background: #e8f4fc;
+            color: var(--secondary-color);
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        
+        .dashboard-tabs {
+            display: flex;
+            margin-bottom: 30px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border: 1px solid var(--border-color);
+        }
+        
+        .dashboard-tab {
+            padding: 16px 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            flex: 1;
+            font-weight: 500;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border-right: 1px solid var(--border-color);
+        }
+        
+        .dashboard-tab:last-child {
+            border-right: none;
+        }
+        
+        .dashboard-tab i {
+            font-size: 16px;
+        }
+        
+        .dashboard-tab.active {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .dashboard-tab:hover:not(.active) {
+            background-color: var(--light-bg);
+        }
+        
+        .dashboard-content {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+            min-height: 600px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .dashboard-panel {
+            display: none;
+        }
+        
+        .dashboard-panel.active {
+            display: block;
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        h2 i {
+            color: var(--secondary-color);
+        }
+        
+        h3 {
+            color: var(--primary-color);
+            margin: 20px 0 12px;
+            font-size: 16px;
+        }
+        
+        .form-section {
+            background: var(--light-bg);
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--secondary-color);
+        }
+        
+        .section-title {
+            color: var(--primary-color);
+            margin-bottom: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .section-title i {
+            color: var(--secondary-color);
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+        
+        label.required::after {
+            content: " *";
+            color: var(--danger-color);
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.3s;
+            background: white;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.1);
+        }
+        
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .three-column {
+            grid-template-columns: repeat(3, 1fr);
+        }
+        
+        .checkbox-group, .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 4px;
+        }
+        
+        .checkbox-item, .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .checkbox-item input, .radio-item input {
+            width: auto;
+        }
+        
+        .btn-group {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        button {
+            padding: 10px 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background: #1a252f;
+            border-color: #1a252f;
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: var(--text-primary);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--light-bg);
+        }
+        
+        .info-box {
+            background: #e8f4fc;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 16px;
+            border-left: 3px solid var(--secondary-color);
+            font-size: 13px;
+            color: var(--text-primary);
+        }
+        
+        .info-box strong {
+            color: var(--secondary-color);
+        }
+        
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+            margin-top: 8px;
+        }
+        
+        .service-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .service-card:hover {
+            border-color: var(--secondary-color);
+            background: #f8fafc;
+        }
+        
+        .service-card.selected {
+            border-color: var(--success-color);
+            background: #f0f9f4;
+        }
+        
+        .service-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--light-bg);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+            color: var(--secondary-color);
+        }
+        
+        .service-name {
+            font-weight: 500;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+        
+        .service-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .cashback-info {
+            background: #f0f9f4;
+            border-left: 3px solid var(--success-color);
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 13px;
+        }
+        
+        .cashback-info i {
+            color: var(--success-color);
+            margin-right: 6px;
+        }
+        
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 6px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            text-align: center;
+            border-top: 3px solid var(--secondary-color);
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin: 8px 0;
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 500;
+        }
+        
+        .promo-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+        
+        .promo-card {
+            background: white;
+            border-radius: 6px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-top: 3px solid;
+            border: 1px solid var(--border-color);
+        }
+        
+        .promo-card.b2b {
+            border-top-color: var(--secondary-color);
+        }
+        
+        .promo-card.d2c {
+            border-top-color: var(--success-color);
+        }
+        
+        .promo-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .promo-code {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-color);
+            font-family: 'Courier New', monospace;
+        }
+        
+        .promo-badge {
+            padding: 3px 10px;
+            border-radius: 16px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .badge-b2b {
+            background: #e8f4fc;
+            color: var(--secondary-color);
+        }
+        
+        .badge-d2c {
+            background: #f0f9f4;
+            color: var(--success-color);
+        }
+        
+        .promo-details {
+            margin: 12px 0;
+        }
+        
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            font-size: 13px;
+        }
+        
+        .detail-label {
+            color: var(--text-secondary);
+        }
+        
+        .detail-value {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+        
+        .service-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 8px;
+        }
+        
+        .service-tag {
+            background: var(--light-bg);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+        
+        .retailer-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 8px;
+        }
+        
+        .retailer-tag {
+            background: #e8f4fc;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            color: var(--secondary-color);
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 4px;
+        }
+        
+        .status-active {
+            background: var(--success-color);
+        }
+        
+        .status-inactive {
+            background: var(--danger-color);
+        }
+        
+        .status-scheduled {
+            background: var(--warning-color);
+        }
+        
+        .delivery-option {
+            margin-top: 8px;
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+        
+        @media (max-width: 1200px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .stats-overview {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .promo-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-tags"></i>
+                </div>
+                <span>Promo Code Manager</span>
+            </div>
+            <div class="user-info">
+                <div class="role-badge">Admin</div>
+                <div class="avatar">AD</div>
+                <div>
+                    <div style="font-weight: 500;">System Administrator</div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">Last login: Today 09:30 AM</div>
+                </div>
+            </div>
+        </header>
+        
+        <div class="dashboard-tabs">
+            <div class="dashboard-tab active" data-panel="b2b">
+                <i class="fas fa-building"></i>
+                B2B Promotions
+            </div>
+            <div class="dashboard-tab" data-panel="d2c">
+                <i class="fas fa-users"></i>
+                D2C Promotions
+            </div>
+            <div class="dashboard-tab" data-panel="overview">
+                <i class="fas fa-chart-bar"></i>
+                Analytics
+            </div>
+        </div>
+        
+        <div class="dashboard-content">
+            <!-- B2B Promo Management Panel -->
+            <div class="dashboard-panel active" id="b2b-panel">
+                <h2><i class="fas fa-building"></i> B2B Promo Creation</h2>
+                
+                <div class="info-box">
+                    <strong>B2B Model:</strong> Volume-based discounts for retailers. Retailers offer services (Recharge, BBPS, Travel, etc.) to their customers. Discounts are applied as commission on transaction volume.
+                </div>
+                
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="fas fa-info-circle"></i>
+                        Promotion Details
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="b2b-promo-name" class="required">Promotion Name</label>
+                            <input type="text" id="b2b-promo-name" placeholder="e.g., Retailer Volume Bonus Q4">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="b2b-promo-code" class="required">Promo Code</label>
+                            <input type="text" id="b2b-promo-code" placeholder="e.g., RETAILER2024">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="b2b-retailer" class="required">Select Retailer(s)</label>
+                            <select id="b2b-retailer" multiple style="height: 120px;">
+                                <option value="all">All Retailers</option>
+                                <option value="MW001">Mobile World (MW001) - Delhi</option>
+                                <option value="QR002">Quick Recharge (QR002) - Mumbai</option>
+                                <option value="TH003">Travel Hub (TH003) - Bangalore</option>
+                                <option value="BPC004">Bill Pay Center (BPC004) - Chennai</option>
+                                <option value="MT005">Money Transfer (MT005) - Kolkata</option>
+                                <option value="RS006">Recharge Shop (RS006) - Hyderabad</option>
+                                <option value="BP007">Bill Pay (BP007) - Pune</option>
+                                <option value="TT008">Travel Time (TT008) - Ahmedabad</option>
+                                <option value="MS009">Mobile Shop (MS009) - Jaipur</option>
+                                <option value="RC010">Recharge Center (RC010) - Lucknow</option>
+                            </select>
+                            <small style="color: var(--text-secondary); font-size: 12px;">Hold Ctrl/Cmd to select multiple retailers</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="b2b-discount-type" class="required">Discount Type</label>
+                            <select id="b2b-discount-type">
+                                <option value="percentage">Percentage (%) Commission</option>
+                                <option value="flat">Flat Amount per Transaction</option>
+                                <option value="tiered">Tiered Commission</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="b2b-discount-value" class="required">Commission Value</label>
+                            <input type="number" id="b2b-discount-value" placeholder="e.g., 10">
+                            <small style="color: var(--text-secondary); font-size: 12px;">Percentage or flat amount</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="fas fa-globe"></i>
+                        Geographical Targeting
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="b2b-country" class="required">Country</label>
+                            <select id="b2b-country">
+                                <option value="IN">India</option>
+                                <option value="US">United States</option>
+                                <option value="UK">United Kingdom</option>
+                                <option value="AE">UAE</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="b2b-state">State (Optional)</label>
+                            <select id="b2b-state" multiple>
+                                <option value="delhi">Delhi</option>
+                                <option value="maharashtra">Maharashtra</option>
+                                <option value="karnataka">Karnataka</option>
+                                <option value="tamilnadu">Tamil Nadu</option>
+                                <option value="punjab">Punjab</option>
+                                <option value="haryana">Haryana</option>
+                                <option value="up">Uttar Pradesh</option>
+                                <option value="gujarat">Gujarat</option>
+                            </select>
+                            <small style="color: var(--text-secondary); font-size: 12px;">For regional promotions</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="fas fa-chart-line"></i>
+                        Volume Requirements
+                    </div>
+                    <div class="form-grid three-column">
+                        <div class="form-group">
+                            <label for="b2b-min-volume" class="required">Minimum Volume</label>
+                            <input type="number" id="b2b-min-volume" placeholder="e.g., 10000">
+                            <small style="color: var(--text-secondary); font-size: 12px;">Minimum transaction volume required</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="b2b-max-commission" class="required">Max Commission Cap</label>
+                            <input type="number" id="b2b-max-commission" placeholder="e.g., 5000">
+                            <small style="color: var(--text-secondary); font-size: 12px;">Maximum commission amount</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="b2b-usage-limit">Usage Limit</label>
+                            <input type="number" id="b2b-usage-limit" placeholder="Unlimited if empty">
+                            <small style="color: var(--text-secondary); font-size: 12px;">Total usage limit (optional)</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="fas fa-calendar-alt"></i>
+                        Validity Period
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="b2b-start-date" class="required">Start Date & Time</label>
+                            <input type="datetime-local" id="b2b-start-date">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="b2b-end-date" class="required">End Date & Time</label>
+                            <input type="datetime-local" id="b2b-end-date">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="fas fa-cog"></i>
+                        Additional Settings
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label for="b2b-description" class="required">Description</label>
+                            <textarea id="b2b-description" rows="3" placeholder="Detailed description of this retailer promotion..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="b2b-status" class="required">Status</label>
+                            <select id="b2b-status">
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                                <option value="scheduled">Scheduled</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="btn-group">
+                    <button class="btn-secondary">
+                        <i class="fas fa-times"></i>
+                        Cancel
+                    </button>
+                    <button class="btn-primary" id="create-b2b-promo">
+                        <i class="fas fa-check"></i>
+                        Create B2B Promotion
+                    </button>
+                </div>
+            </div>
+            
+            <!-- D2C Promo Management Panel -->
+            <div class="dashboard-panel" id="d2c-panel">
+                <h2><i class="fas fa-users"></i> D2C Promo Creation</h2>
+                
+                <div class="info-box">
+                    <strong>D2C Model:</strong> Service-based promotions for end customers. Users login via mobile number and use services through wallet system. Full amount deducted from wallet first, cashback credited after transaction completion.
+                </div>
+                
+                <div class="cashback-info">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Cashback System:</strong> Customer pays full amount from wallet → Service processed → Cashback credited to wallet
+                </div>
+                
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="fas fa-info-circle"></i>
+                        Campaign Details
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="d2c-promo-name" class="required">Campaign Name</label>
+                            <input type="text" id="d2c-promo-name" placeholder="e.g., Summer Recharge Offer">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="d2c-promo-code" class="required">Promo Code</label>
+                            <input type="text" id="d2c-promo-code" placeholder="e.g., SUMMER100">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="d2c-promo-type" class="required">Promotion Type</label>
+                            <select id="d2c-promo-type">
+                                <option value="cashback">Cashback to Wallet</option>
+                                <option value="discount">Instant Discount</option>
+                                <option value="free_service">Free Service Value</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="d2c-value-type" class="required">Value Type</label>
+                            <select id="d2c-value-type">
+                                <option value="percentage">Percentage (%)</option>
+                                <option value="flat">Flat Amount</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="d2c-discount-value" class="required">Promo Value</label>
+                            <input type="number" id="d2c-discount-value" placeholder="e.g., 15">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="fas fa-boxes"></i>
+                        Service & Product Selection
+                    </div>
+                    <div class="form-group full-width">
+                        <label class="required">Select Applicable Services</label>
+                        <div class="service-grid">
+                            <div class="service-card" data-service="recharge">
+                                <div class="service-icon">
+                                    <i class="fas fa-mobile-alt"></i>
+                                </div>
+                                <div class="service-name">Mobile Recharge</div>
+                                <div class="service-desc">Prepaid & Postpaid</div>
+                            </div>
+                            
+                            <div class="service-card" data-service="dth">
+                                <div class="service-icon">
+                                    <i class="fas fa-tv"></i>
+                                </div>
+                                <div class="service-name">DTH Recharge</div>
+                                <div class="service-desc">Satellite TV</div>
+                            </div>
+                            
+                            <div class="service-card" data-service="bbps">
+                                <div class="service-icon">
+                                    <i class="fas fa-file-invoice-dollar"></i>
+                                </div>
+                                <div class="service-name">BBPS Bills</div>
+                                <div class="service-desc">Utility Payments</div>
+                            </div>
+                            
+                            <div class="service-card" data-service="flight">
+                                <div class="service-icon">
+                                    <i class="fas fa-plane"></i>
+                                </div>
+                                <div class="service-name">Flight Booking</div>
+                                <div class="service-desc">Domestic & International</div>
+                            </div>
+                            
+                            <div class="service-card" data-service="bus">
+                                <div class="service-icon">
+                                    <i class="fas fa-bus"></i>
+                                </div>
+                                <div class="service-name">Bus Booking</div>
+                                <div class="service-desc">Intercity Travel</div>
+                            </div>
+                            
+                            <div class="service-card" data-service="hotel">
+                                <div class="service-icon">
+                                    <i class="fas fa-hotel"></i>
+                                </div>
+                                <div class="service-name">Hotel Booking</div>
+                                <div class="service-desc">Accommodation</div>
+                            </div>
+                            
+                            <div class="service-card" data-service="dmt">
+                                <div class="service-icon">
+                                    <i class="fas fa-money-bill-transfer"></i>
+                                </div>
+                                <div class="service-name">Money Transfer</div>
+                                <div class="service-desc">DMT Services</div>
+                            </div>
+                            
+                            <div class="service-card" data-service="aeps">
+                                <div class="service-icon">
+                                    <i class="fas fa-university"></i>
+                                </div>
+                                <div class="service-name">AEPS Banking</div>
+                                <div class="service-desc">Banking Services</div>
+                            </div>
+                            
+                            <div class="service-card" data-service="ecom">
+                                <div class="service-icon">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </div>
+                                <div class="service-name">E-commerce</div>
+                                <div class="service-desc">Product Purchases</div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="selected-services">
+                        <div class="delivery-option" id="delivery-section" style="display: none;">
+                            <label><input type="checkbox" id="free-delivery"> Include Free Delivery for E-commerce orders</label>
+                            <small style="color: var(--text-secondary);">Applicable only for physical product orders</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="fas fa-globe"></i>
+                        Geographical Targeting
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="d2c-country" class="required">Country</label>
+                            <select id="d2c-country">
+                                <option value="IN">India</option>
+                                <option value="US">United States</option>
+                                <option value="UK">United Kingdom</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="d2c-state">State (Optional)</label>
+                            <select id="d2c-state" multiple>
+                                <option value="delhi">Delhi</option>
+                                <option value="maharashtra">Maharashtra</option>
+                                <option value="karnataka">Karnataka</option>
+                                <option value="tamilnadu">Tamil Nadu</option>
+                                <option value="punjab">Punjab</option>
+                                <option value="haryana">Haryana</option>
+                                <option value="up">Uttar Pradesh</option>
+                                <option value="gujarat">Gujarat</option>
+                            </select>
+                            <small style="color: var(--text-secondary); font-size: 12px;">Hold Ctrl/Cmd to select multiple states</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="fas fa-user-check"></i>
+                        User Eligibility
+                    </div>
+                    <div class="form-grid three-column">
+                        <div class="form-group">
+                            <label for="d2c-user-type" class="required">User Type</label>
+                            <select id="d2c-user-type">
+                                <option value="all">All Users</option>
+                                <option value="new">New Users Only</option>
+                                <option value="existing">Existing Users Only</option>
+                                <option value="inactive">Returning Users (Inactive)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="d2c-inactive-days">Inactive Days (for returning)</label>
+                            <input type="number" id="d2c-inactive-days" placeholder="e.g., 30">
+                            <small style="color: var(--text-secondary); font-size: 12px;">Days since last transaction</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="d2c-min-order" class="required">Minimum Order Value</label>
+                            <input type="number" id="d2c-min-order" placeholder="e.g., 500">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="d2c-max-discount" class="required">Maximum Discount/Cashback</label>
+                            <input type="number" id="d2c-max-discount" placeholder="e.g., 200">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="d2c-usage-user" class="required">Usage Per User</label>
+                            <input type="number" id="d2c-usage-user" placeholder="e.g., 1" value="1">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="d2c-total-usage">Total Usage Limit</label>
+                            <input type="number" id="d2c-total-usage" placeholder="e.g., 1000">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="fas fa-calendar-alt"></i>
+                        Validity Period
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="d2c-start-date" class="required">Start Date & Time</label>
+                            <input type="datetime-local" id="d2c-start-date">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="d2c-end-date" class="required">End Date & Time</label>
+                            <input type="datetime-local" id="d2c-end-date">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="fas fa-cog"></i>
+                        Additional Settings
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label for="d2c-description" class="required">Campaign Description</label>
+                            <textarea id="d2c-description" rows="3" placeholder="Describe this promotion for customers..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="d2c-status" class="required">Status</label>
+                            <select id="d2c-status">
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                                <option value="scheduled">Scheduled</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="btn-group">
+                    <button class="btn-secondary">
+                        <i class="fas fa-times"></i>
+                        Cancel
+                    </button>
+                    <button class="btn-primary" id="create-d2c-promo">
+                        <i class="fas fa-check"></i>
+                        Create D2C Promotion
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Analytics Panel -->
+            <div class="dashboard-panel" id="overview-panel">
+                <h2><i class="fas fa-chart-bar"></i> Promo Analytics Dashboard</h2>
+                
+                <div class="stats-overview">
+                    <div class="stat-card">
+                        <div class="stat-label">Total Active Promotions</div>
+                        <div class="stat-value">42</div>
+                        <div style="color: var(--success-color); font-size: 13px; margin-top: 4px;">
+                            <i class="fas fa-arrow-up"></i> 8% from last month
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-label">Total Redemptions</div>
+                        <div class="stat-value">8,452</div>
+                        <div style="color: var(--success-color); font-size: 13px; margin-top: 4px;">
+                            <i class="fas fa-arrow-up"></i> 15% from last month
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-label">B2B Promotions</div>
+                        <div class="stat-value">15</div>
+                        <div style="color: var(--secondary-color); font-size: 13px; margin-top: 4px;">
+                            <i class="fas fa-building"></i> Volume-based
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-label">D2C Promotions</div>
+                        <div class="stat-value">27</div>
+                        <div style="color: var(--success-color); font-size: 13px; margin-top: 4px;">
+                            <i class="fas fa-users"></i> Service-based
+                        </div>
+                    </div>
+                </div>
+                
+                <h3><i class="fas fa-history"></i> Recent Promotions</h3>
+                
+                <div class="promo-list">
+                    <div class="promo-card b2b">
+                        <div class="promo-header">
+                            <div class="promo-code">RET2024Q4</div>
+                            <div class="promo-badge badge-b2b">B2B</div>
+                        </div>
+                        <div class="promo-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Name:</span>
+                                <span class="detail-value">Retailer Volume Bonus</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Type:</span>
+                                <span class="detail-value">10% Commission</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Min Volume:</span>
+                                <span class="detail-value">₹10,000</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Status:</span>
+                                <span class="detail-value">
+                                    <span class="status-indicator status-active"></span>
+                                    Active
+                                </span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Valid Until:</span>
+                                <span class="detail-value">31 Dec 2024</span>
+                            </div>
+                        </div>
+                        <div class="retailer-tags">
+                            <span class="retailer-tag">Mobile World</span>
+                            <span class="retailer-tag">Quick Recharge</span>
+                        </div>
+                    </div>
+                    
+                    <div class="promo-card d2c">
+                        <div class="promo-header">
+                            <div class="promo-code">CASHBACK100</div>
+                            <div class="promo-badge badge-d2c">D2C</div>
+                        </div>
+                        <div class="promo-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Name:</span>
+                                <span class="detail-value">Recharge Cashback</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Type:</span>
+                                <span class="detail-value">10% Cashback</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Min Order:</span>
+                                <span class="detail-value">₹300</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Status:</span>
+                                <span class="detail-value">
+                                    <span class="status-indicator status-active"></span>
+                                    Active
+                                </span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Valid Until:</span>
+                                <span class="detail-value">30 Jun 2024</span>
+                            </div>
+                        </div>
+                        <div class="service-tags">
+                            <span class="service-tag">Mobile Recharge</span>
+                            <span class="service-tag">DTH Recharge</span>
+                        </div>
+                    </div>
+                    
+                    <div class="promo-card d2c">
+                        <div class="promo-header">
+                            <div class="promo-code">FLIGHT50</div>
+                            <div class="promo-badge badge-d2c">D2C</div>
+                        </div>
+                        <div class="promo-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Name:</span>
+                                <span class="detail-value">Flight Booking Offer</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Type:</span>
+                                <span class="detail-value">Flat ₹50 Cashback</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Min Order:</span>
+                                <span class="detail-value">₹2,000</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Status:</span>
+                                <span class="detail-value">
+                                    <span class="status-indicator status-active"></span>
+                                    Active
+                                </span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Valid Until:</span>
+                                <span class="detail-value">15 Aug 2024</span>
+                            </div>
+                        </div>
+                        <div class="service-tags">
+                            <span class="service-tag">Flight Booking</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 24px;"><i class="fas fa-map-marker-alt"></i> Regional Analysis</h3>
+                <div class="info-box">
+                    <strong>Regional Promotions:</strong>
+                    <br><br>
+                    • <strong>Punjab & Haryana:</strong> 4 active promos (Vaisakhi Special, State Day Offer)
+                    <br>
+                    • <strong>Maharashtra:</strong> 6 active promos (Mumbai Festival, Ganesh Chaturthi)
+                    <br>
+                    • <strong>All India:</strong> 15 active promos (National campaigns)
+                    <br>
+                    • <strong>South Region:</strong> 5 active promos (Regional festivals)
+                    <br><br>
+                    <strong>Delivery Note:</strong> Free delivery option only applicable for E-commerce physical products, not for digital services.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab switching functionality
+            const tabs = document.querySelectorAll('.dashboard-tab');
+            const panels = document.querySelectorAll('.dashboard-panel');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    panels.forEach(p => p.classList.remove('active'));
+                    
+                    tab.classList.add('active');
+                    const panelId = tab.getAttribute('data-panel');
+                    document.getElementById(`${panelId}-panel`).classList.add('active');
+                });
+            });
+            
+            // Service selection with visual feedback
+            const serviceCards = document.querySelectorAll('.service-card');
+            const selectedServices = new Set();
+            const deliverySection = document.getElementById('delivery-section');
+            
+            serviceCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const service = this.getAttribute('data-service');
+                    
+                    if (selectedServices.has(service)) {
+                        selectedServices.delete(service);
+                        this.classList.remove('selected');
+                    } else {
+                        selectedServices.add(service);
+                        this.classList.add('selected');
+                    }
+                    
+                    // Update hidden input
+                    document.getElementById('selected-services').value = Array.from(selectedServices).join(',');
+                    
+                    // Show/hide delivery option based on e-commerce selection
+                    if (selectedServices.has('ecom')) {
+                        deliverySection.style.display = 'block';
+                    } else {
+                        deliverySection.style.display = 'none';
+                        document.getElementById('free-delivery').checked = false;
+                    }
+                });
+            });
+            
+            // Set default dates
+            const now = new Date();
+            const future = new Date();
+            future.setMonth(future.getMonth() + 1);
+            
+            const formatDateTimeLocal = (date) => {
+                return date.toISOString().slice(0, 16);
+            };
+            
+            // Set default dates for both forms
+            document.getElementById('b2b-start-date').value = formatDateTimeLocal(now);
+            document.getElementById('b2b-end-date').value = formatDateTimeLocal(future);
+            document.getElementById('d2c-start-date').value = formatDateTimeLocal(now);
+            document.getElementById('d2c-end-date').value = formatDateTimeLocal(future);
+            
+            // B2B Promo Creation
+            document.getElementById('create-b2b-promo').addEventListener('click', function() {
+                const promoName = document.getElementById('b2b-promo-name').value;
+                const promoCode = document.getElementById('b2b-promo-code').value;
+                
+                if (!promoName || !promoCode) {
+                    alert('Please fill in all required fields for B2B promo creation.');
+                    return;
+                }
+                
+                const retailers = Array.from(document.getElementById('b2b-retailer').selectedOptions)
+                    .map(opt => opt.text);
+                
+                const formData = {
+                    type: 'B2B',
+                    name: promoName,
+                    code: promoCode,
+                    retailers: retailers,
+                    discountType: document.getElementById('b2b-discount-type').value,
+                    discountValue: document.getElementById('b2b-discount-value').value,
+                    country: document.getElementById('b2b-country').value,
+                    states: Array.from(document.getElementById('b2b-state').selectedOptions).map(opt => opt.value),
+                    minVolume: document.getElementById('b2b-min-volume').value,
+                    maxCommission: document.getElementById('b2b-max-commission').value,
+                    startDate: document.getElementById('b2b-start-date').value,
+                    endDate: document.getElementById('b2b-end-date').value,
+                    status: document.getElementById('b2b-status').value
+                };
+                
+                console.log('B2B Promo Created:', formData);
+                alert(`B2B Promo "${promoCode}" created successfully!\n\nRetailers: ${retailers.length > 3 ? retailers.slice(0, 3).join(', ') + '...' : retailers.join(', ')}`);
+                
+                // Reset form
+                document.getElementById('b2b-promo-name').value = '';
+                document.getElementById('b2b-promo-code').value = '';
+            });
+            
+            // D2C Promo Creation
+            document.getElementById('create-d2c-promo').addEventListener('click', function() {
+                const promoName = document.getElementById('d2c-promo-name').value;
+                const promoCode = document.getElementById('d2c-promo-code').value;
+                
+                if (!promoName || !promoCode || selectedServices.size === 0) {
+                    alert('Please fill in all required fields and select at least one service.');
+                    return;
+                }
+                
+                const formData = {
+                    type: 'D2C',
+                    name: promoName,
+                    code: promoCode,
+                    promoType: document.getElementById('d2c-promo-type').value,
+                    valueType: document.getElementById('d2c-value-type').value,
+                    discountValue: document.getElementById('d2c-discount-value').value,
+                    services: Array.from(selectedServices),
+                    country: document.getElementById('d2c-country').value,
+                    states: Array.from(document.getElementById('d2c-state').selectedOptions).map(opt => opt.value),
+                    userType: document.getElementById('d2c-user-type').value,
+                    inactiveDays: document.getElementById('d2c-inactive-days').value || null,
+                    minOrder: document.getElementById('d2c-min-order').value,
+                    maxDiscount: document.getElementById('d2c-max-discount').value,
+                    usagePerUser: document.getElementById('d2c-usage-user').value,
+                    totalUsage: document.getElementById('d2c-total-usage').value || null,
+                    freeDelivery: document.getElementById('free-delivery').checked,
+                    startDate: document.getElementById('d2c-start-date').value,
+                    endDate: document.getElementById('d2c-end-date').value,
+                    status: document.getElementById('d2c-status').value
+                };
+                
+                console.log('D2C Promo Created:', formData);
+                
+                let serviceNames = Array.from(selectedServices).map(s => {
+                    const card = document.querySelector(`.service-card[data-service="${s}"]`);
+                    return card ? card.querySelector('.service-name').textContent : s;
+                });
+                
+                alert(`D2C Promo "${promoCode}" created successfully!\n\nServices: ${serviceNames.join(', ')}\n\nNote: Full amount deducted from wallet, cashback credited after service completion.`);
+                
+                // Reset form
+                document.getElementById('d2c-promo-name').value = '';
+                document.getElementById('d2c-promo-code').value = '';
+                selectedServices.clear();
+                serviceCards.forEach(card => card.classList.remove('selected'));
+                document.getElementById('selected-services').value = '';
+                deliverySection.style.display = 'none';
+                document.getElementById('free-delivery').checked = false;
+            });
+            
+            // Show delivery option only when e-commerce is selected
+            document.getElementById('d2c-promo-type').addEventListener('change', function() {
+                if (this.value === 'free_service' && selectedServices.has('ecom')) {
+                    deliverySection.style.display = 'block';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
