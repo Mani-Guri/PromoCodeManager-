@@ -252,10 +252,27 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .checkbox-item:hover, .radio-item:hover {
+            border-color: var(--secondary-color);
+            background: #f8fafc;
+        }
+        
+        .checkbox-item.selected, .radio-item.selected {
+            border-color: var(--secondary-color);
+            background: #e8f4fc;
         }
         
         .checkbox-item input, .radio-item input {
             width: auto;
+            margin-right: 6px;
         }
         
         .btn-group {
@@ -376,6 +393,86 @@
             margin-right: 6px;
         }
         
+        .app-type-info {
+            background: #fff3e0;
+            border-left: 3px solid var(--warning-color);
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 13px;
+        }
+        
+        .app-type-info i {
+            color: var(--warning-color);
+            margin-right: 6px;
+        }
+        
+        /* E-commerce Products Section */
+        .ecom-products-section {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .product-category {
+            margin-bottom: 15px;
+        }
+        
+        .category-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+            padding-bottom: 4px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 8px;
+        }
+        
+        .product-item {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .product-item:hover {
+            border-color: var(--secondary-color);
+        }
+        
+        .product-item.selected {
+            border-color: var(--success-color);
+            background: #f0f9f4;
+        }
+        
+        .product-name {
+            font-weight: 500;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+        
+        .product-price {
+            font-size: 12px;
+            color: var(--success-color);
+            font-weight: 600;
+        }
+        
+        .select-all-products {
+            margin-bottom: 15px;
+            padding: 8px;
+            background: #e8f4fc;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+        
         .stats-overview {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -458,6 +555,32 @@
         .badge-d2c {
             background: #f0f9f4;
             color: var(--success-color);
+        }
+        
+        .app-badge {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 500;
+            margin-left: 4px;
+            background: var(--light-bg);
+            color: var(--text-secondary);
+        }
+        
+        .app-badge.web {
+            background: #e8f4fc;
+            color: var(--secondary-color);
+        }
+        
+        .app-badge.app {
+            background: #f0f9f4;
+            color: var(--success-color);
+        }
+        
+        .app-badge.both {
+            background: #fff3e0;
+            color: var(--warning-color);
         }
         
         .promo-details {
@@ -595,6 +718,11 @@
                     <strong>B2B Model:</strong> Volume-based discounts for retailers. Retailers offer services (Recharge, BBPS, Travel, etc.) to their customers. Discounts are applied as commission on transaction volume.
                 </div>
                 
+                <div class="app-type-info">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Application Type:</strong> Select where this promo will be available - Web Portal for retailers, Mobile App for retailers, or Both.
+                </div>
+                
                 <div class="form-section">
                     <div class="section-title">
                         <i class="fas fa-info-circle"></i>
@@ -609,6 +737,30 @@
                         <div class="form-group">
                             <label for="b2b-promo-code" class="required">Promo Code</label>
                             <input type="text" id="b2b-promo-code" placeholder="e.g., RETAILER2024">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="b2b-app-type" class="required">Application Type</label>
+                            <div class="radio-group">
+                                <div class="radio-item" data-value="web">
+                                    <input type="radio" id="b2b-app-web" name="b2b-app-type" value="web">
+                                    <label for="b2b-app-web">
+                                        <i class="fas fa-desktop"></i> Web Portal
+                                    </label>
+                                </div>
+                                <div class="radio-item" data-value="app">
+                                    <input type="radio" id="b2b-app-mobile" name="b2b-app-type" value="app">
+                                    <label for="b2b-app-mobile">
+                                        <i class="fas fa-mobile-alt"></i> Mobile App
+                                    </label>
+                                </div>
+                                <div class="radio-item" data-value="both">
+                                    <input type="radio" id="b2b-app-both" name="b2b-app-type" value="both" checked>
+                                    <label for="b2b-app-both">
+                                        <i class="fas fa-globe"></i> Both Platforms
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                         
                         <div class="form-group">
@@ -628,7 +780,15 @@
                             </select>
                             <small style="color: var(--text-secondary); font-size: 12px;">Hold Ctrl/Cmd to select multiple retailers</small>
                         </div>
-                        
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="fas fa-chart-line"></i>
+                        Commission Structure
+                    </div>
+                    <div class="form-grid">
                         <div class="form-group">
                             <label for="b2b-discount-type" class="required">Discount Type</label>
                             <select id="b2b-discount-type">
@@ -642,6 +802,18 @@
                             <label for="b2b-discount-value" class="required">Commission Value</label>
                             <input type="number" id="b2b-discount-value" placeholder="e.g., 10">
                             <small style="color: var(--text-secondary); font-size: 12px;">Percentage or flat amount</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="b2b-min-volume" class="required">Minimum Volume</label>
+                            <input type="number" id="b2b-min-volume" placeholder="e.g., 10000">
+                            <small style="color: var(--text-secondary); font-size: 12px;">Minimum transaction volume required</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="b2b-max-commission" class="required">Max Commission Cap</label>
+                            <input type="number" id="b2b-max-commission" placeholder="e.g., 5000">
+                            <small style="color: var(--text-secondary); font-size: 12px;">Maximum commission amount</small>
                         </div>
                     </div>
                 </div>
@@ -675,32 +847,6 @@
                                 <option value="gujarat">Gujarat</option>
                             </select>
                             <small style="color: var(--text-secondary); font-size: 12px;">For regional promotions</small>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="form-section">
-                    <div class="section-title">
-                        <i class="fas fa-chart-line"></i>
-                        Volume Requirements
-                    </div>
-                    <div class="form-grid three-column">
-                        <div class="form-group">
-                            <label for="b2b-min-volume" class="required">Minimum Volume</label>
-                            <input type="number" id="b2b-min-volume" placeholder="e.g., 10000">
-                            <small style="color: var(--text-secondary); font-size: 12px;">Minimum transaction volume required</small>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="b2b-max-commission" class="required">Max Commission Cap</label>
-                            <input type="number" id="b2b-max-commission" placeholder="e.g., 5000">
-                            <small style="color: var(--text-secondary); font-size: 12px;">Maximum commission amount</small>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="b2b-usage-limit">Usage Limit</label>
-                            <input type="number" id="b2b-usage-limit" placeholder="Unlimited if empty">
-                            <small style="color: var(--text-secondary); font-size: 12px;">Total usage limit (optional)</small>
                         </div>
                     </div>
                 </div>
@@ -770,6 +916,11 @@
                     <strong>Cashback System:</strong> Customer pays full amount from wallet → Service processed → Cashback credited to wallet
                 </div>
                 
+                <div class="app-type-info">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Application Type:</strong> Select where customers can use this promo - Website, Mobile App, or Both platforms.
+                </div>
+                
                 <div class="form-section">
                     <div class="section-title">
                         <i class="fas fa-info-circle"></i>
@@ -784,6 +935,30 @@
                         <div class="form-group">
                             <label for="d2c-promo-code" class="required">Promo Code</label>
                             <input type="text" id="d2c-promo-code" placeholder="e.g., SUMMER100">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="d2c-app-type" class="required">Application Type</label>
+                            <div class="radio-group">
+                                <div class="radio-item" data-value="web">
+                                    <input type="radio" id="d2c-app-web" name="d2c-app-type" value="web">
+                                    <label for="d2c-app-web">
+                                        <i class="fas fa-desktop"></i> Website
+                                    </label>
+                                </div>
+                                <div class="radio-item" data-value="app">
+                                    <input type="radio" id="d2c-app-mobile" name="d2c-app-type" value="app">
+                                    <label for="d2c-app-mobile">
+                                        <i class="fas fa-mobile-alt"></i> Mobile App
+                                    </label>
+                                </div>
+                                <div class="radio-item" data-value="both">
+                                    <input type="radio" id="d2c-app-both" name="d2c-app-type" value="both" checked>
+                                    <label for="d2c-app-both">
+                                        <i class="fas fa-globe"></i> Both Platforms
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                         
                         <div class="form-group">
@@ -891,6 +1066,86 @@
                             </div>
                         </div>
                         <input type="hidden" id="selected-services">
+                        
+                        <!-- E-commerce Products Section -->
+                        <div class="ecom-products-section" id="ecom-products">
+                            <h4 style="margin-bottom: 15px; color: var(--primary-color);">
+                                <i class="fas fa-shopping-bag"></i> Select E-commerce Products
+                            </h4>
+                            
+                            <div class="select-all-products">
+                                <label>
+                                    <input type="checkbox" id="select-all-products"> Select All Products
+                                </label>
+                            </div>
+                            
+                            <div class="product-category">
+                                <div class="category-title">Electronics</div>
+                                <div class="product-grid">
+                                    <div class="product-item" data-product="mobile">
+                                        <div class="product-name">Smartphones</div>
+                                        <div class="product-price">₹8,000 - ₹50,000</div>
+                                    </div>
+                                    <div class="product-item" data-product="laptop">
+                                        <div class="product-name">Laptops</div>
+                                        <div class="product-price">₹25,000 - ₹1,20,000</div>
+                                    </div>
+                                    <div class="product-item" data-product="tablet">
+                                        <div class="product-name">Tablets</div>
+                                        <div class="product-price">₹10,000 - ₹40,000</div>
+                                    </div>
+                                    <div class="product-item" data-product="headphone">
+                                        <div class="product-name">Headphones</div>
+                                        <div class="product-price">₹500 - ₹15,000</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="product-category">
+                                <div class="category-title">Fashion</div>
+                                <div class="product-grid">
+                                    <div class="product-item" data-product="clothing">
+                                        <div class="product-name">Clothing</div>
+                                        <div class="product-price">₹300 - ₹5,000</div>
+                                    </div>
+                                    <div class="product-item" data-product="footwear">
+                                        <div class="product-name">Footwear</div>
+                                        <div class="product-price">₹500 - ₹8,000</div>
+                                    </div>
+                                    <div class="product-item" data-product="accessories">
+                                        <div class="product-name">Accessories</div>
+                                        <div class="product-price">₹100 - ₹3,000</div>
+                                    </div>
+                                    <div class="product-item" data-product="watches">
+                                        <div class="product-name">Watches</div>
+                                        <div class="product-price">₹1,000 - ₹20,000</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="product-category">
+                                <div class="category-title">Home & Kitchen</div>
+                                <div class="product-grid">
+                                    <div class="product-item" data-product="appliances">
+                                        <div class="product-name">Appliances</div>
+                                        <div class="product-price">₹2,000 - ₹50,000</div>
+                                    </div>
+                                    <div class="product-item" data-product="furniture">
+                                        <div class="product-name">Furniture</div>
+                                        <div class="product-price">₹5,000 - ₹1,00,000</div>
+                                    </div>
+                                    <div class="product-item" data-product="cookware">
+                                        <div class="product-name">Cookware</div>
+                                        <div class="product-price">₹500 - ₹10,000</div>
+                                    </div>
+                                    <div class="product-item" data-product="home-decor">
+                                        <div class="product-name">Home Decor</div>
+                                        <div class="product-price">₹200 - ₹8,000</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <div class="delivery-option" id="delivery-section" style="display: none;">
                             <label><input type="checkbox" id="free-delivery"> Include Free Delivery for E-commerce orders</label>
                             <small style="color: var(--text-secondary);">Applicable only for physical product orders</small>
@@ -1070,7 +1325,9 @@
                     <div class="promo-card b2b">
                         <div class="promo-header">
                             <div class="promo-code">RET2024Q4</div>
-                            <div class="promo-badge badge-b2b">B2B</div>
+                            <div class="promo-badge badge-b2b">B2B
+                                <span class="app-badge both">Both Platforms</span>
+                            </div>
                         </div>
                         <div class="promo-details">
                             <div class="detail-item">
@@ -1086,15 +1343,15 @@
                                 <span class="detail-value">₹10,000</span>
                             </div>
                             <div class="detail-item">
+                                <span class="detail-label">Platform:</span>
+                                <span class="detail-value">Web & Mobile App</span>
+                            </div>
+                            <div class="detail-item">
                                 <span class="detail-label">Status:</span>
                                 <span class="detail-value">
                                     <span class="status-indicator status-active"></span>
                                     Active
                                 </span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">Valid Until:</span>
-                                <span class="detail-value">31 Dec 2024</span>
                             </div>
                         </div>
                         <div class="retailer-tags">
@@ -1106,7 +1363,9 @@
                     <div class="promo-card d2c">
                         <div class="promo-header">
                             <div class="promo-code">CASHBACK100</div>
-                            <div class="promo-badge badge-d2c">D2C</div>
+                            <div class="promo-badge badge-d2c">D2C
+                                <span class="app-badge app">Mobile App</span>
+                            </div>
                         </div>
                         <div class="promo-details">
                             <div class="detail-item">
@@ -1122,15 +1381,15 @@
                                 <span class="detail-value">₹300</span>
                             </div>
                             <div class="detail-item">
+                                <span class="detail-label">Platform:</span>
+                                <span class="detail-value">Mobile App Only</span>
+                            </div>
+                            <div class="detail-item">
                                 <span class="detail-label">Status:</span>
                                 <span class="detail-value">
                                     <span class="status-indicator status-active"></span>
                                     Active
                                 </span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">Valid Until:</span>
-                                <span class="detail-value">30 Jun 2024</span>
                             </div>
                         </div>
                         <div class="service-tags">
@@ -1141,21 +1400,27 @@
                     
                     <div class="promo-card d2c">
                         <div class="promo-header">
-                            <div class="promo-code">FLIGHT50</div>
-                            <div class="promo-badge badge-d2c">D2C</div>
+                            <div class="promo-code">ECOM500</div>
+                            <div class="promo-badge badge-d2c">D2C
+                                <span class="app-badge web">Website</span>
+                            </div>
                         </div>
                         <div class="promo-details">
                             <div class="detail-item">
                                 <span class="detail-label">Name:</span>
-                                <span class="detail-value">Flight Booking Offer</span>
+                                <span class="detail-value">E-commerce Special</span>
                             </div>
                             <div class="detail-item">
                                 <span class="detail-label">Type:</span>
-                                <span class="detail-value">Flat ₹50 Cashback</span>
+                                <span class="detail-value">15% Cashback</span>
                             </div>
                             <div class="detail-item">
                                 <span class="detail-label">Min Order:</span>
-                                <span class="detail-value">₹2,000</span>
+                                <span class="detail-value">₹1,500</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Platform:</span>
+                                <span class="detail-value">Website Only</span>
                             </div>
                             <div class="detail-item">
                                 <span class="detail-label">Status:</span>
@@ -1164,30 +1429,25 @@
                                     Active
                                 </span>
                             </div>
-                            <div class="detail-item">
-                                <span class="detail-label">Valid Until:</span>
-                                <span class="detail-value">15 Aug 2024</span>
-                            </div>
                         </div>
                         <div class="service-tags">
-                            <span class="service-tag">Flight Booking</span>
+                            <span class="service-tag">E-commerce</span>
+                            <span class="service-tag">Free Delivery</span>
                         </div>
                     </div>
                 </div>
                 
-                <h3 style="margin-top: 24px;"><i class="fas fa-map-marker-alt"></i> Regional Analysis</h3>
+                <h3 style="margin-top: 24px;"><i class="fas fa-map-marker-alt"></i> Platform Distribution</h3>
                 <div class="info-box">
-                    <strong>Regional Promotions:</strong>
+                    <strong>Application Type Analysis:</strong>
                     <br><br>
-                    • <strong>Punjab & Haryana:</strong> 4 active promos (Vaisakhi Special, State Day Offer)
+                    • <strong>Web Only Promotions:</strong> 12 promotions (28%)
                     <br>
-                    • <strong>Maharashtra:</strong> 6 active promos (Mumbai Festival, Ganesh Chaturthi)
+                    • <strong>Mobile App Only:</strong> 18 promotions (43%)
                     <br>
-                    • <strong>All India:</strong> 15 active promos (National campaigns)
-                    <br>
-                    • <strong>South Region:</strong> 5 active promos (Regional festivals)
+                    • <strong>Both Platforms:</strong> 12 promotions (29%)
                     <br><br>
-                    <strong>Delivery Note:</strong> Free delivery option only applicable for E-commerce physical products, not for digital services.
+                    <strong>E-commerce Products:</strong> Promotions can be targeted to specific product categories or apply to all products.
                 </div>
             </div>
         </div>
@@ -1214,6 +1474,7 @@
             const serviceCards = document.querySelectorAll('.service-card');
             const selectedServices = new Set();
             const deliverySection = document.getElementById('delivery-section');
+            const ecomProductsSection = document.getElementById('ecom-products');
             
             serviceCards.forEach(card => {
                 card.addEventListener('click', function() {
@@ -1230,14 +1491,76 @@
                     // Update hidden input
                     document.getElementById('selected-services').value = Array.from(selectedServices).join(',');
                     
-                    // Show/hide delivery option based on e-commerce selection
+                    // Show/hide e-commerce products section
                     if (selectedServices.has('ecom')) {
+                        ecomProductsSection.style.display = 'block';
                         deliverySection.style.display = 'block';
                     } else {
+                        ecomProductsSection.style.display = 'none';
                         deliverySection.style.display = 'none';
                         document.getElementById('free-delivery').checked = false;
                     }
                 });
+            });
+            
+            // E-commerce product selection
+            const productItems = document.querySelectorAll('.product-item');
+            const selectedProducts = new Set();
+            
+            productItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const product = this.getAttribute('data-product');
+                    
+                    if (selectedProducts.has(product)) {
+                        selectedProducts.delete(product);
+                        this.classList.remove('selected');
+                    } else {
+                        selectedProducts.add(product);
+                        this.classList.add('selected');
+                    }
+                    
+                    // Update select all checkbox
+                    const allProducts = document.querySelectorAll('.product-item');
+                    const allSelected = allProducts.length === selectedProducts.size;
+                    document.getElementById('select-all-products').checked = allSelected;
+                });
+            });
+            
+            // Select all products functionality
+            document.getElementById('select-all-products').addEventListener('change', function() {
+                productItems.forEach(item => {
+                    const product = item.getAttribute('data-product');
+                    
+                    if (this.checked) {
+                        selectedProducts.add(product);
+                        item.classList.add('selected');
+                    } else {
+                        selectedProducts.delete(product);
+                        item.classList.remove('selected');
+                    }
+                });
+            });
+            
+            // Application type selection with visual feedback
+            const appTypeItems = document.querySelectorAll('.radio-item');
+            
+            appTypeItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const radioInput = this.querySelector('input[type="radio"]');
+                    radioInput.checked = true;
+                    
+                    // Update visual selection
+                    appTypeItems.forEach(i => i.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+            });
+            
+            // Initialize app type selection
+            appTypeItems.forEach(item => {
+                const radioInput = item.querySelector('input[type="radio"]');
+                if (radioInput.checked) {
+                    item.classList.add('selected');
+                }
             });
             
             // Set default dates
@@ -1259,6 +1582,7 @@
             document.getElementById('create-b2b-promo').addEventListener('click', function() {
                 const promoName = document.getElementById('b2b-promo-name').value;
                 const promoCode = document.getElementById('b2b-promo-code').value;
+                const appType = document.querySelector('input[name="b2b-app-type"]:checked').value;
                 
                 if (!promoName || !promoCode) {
                     alert('Please fill in all required fields for B2B promo creation.');
@@ -1272,6 +1596,7 @@
                     type: 'B2B',
                     name: promoName,
                     code: promoCode,
+                    appType: appType,
                     retailers: retailers,
                     discountType: document.getElementById('b2b-discount-type').value,
                     discountValue: document.getElementById('b2b-discount-value').value,
@@ -1285,7 +1610,13 @@
                 };
                 
                 console.log('B2B Promo Created:', formData);
-                alert(`B2B Promo "${promoCode}" created successfully!\n\nRetailers: ${retailers.length > 3 ? retailers.slice(0, 3).join(', ') + '...' : retailers.join(', ')}`);
+                
+                const appTypeText = appType === 'web' ? 'Web Portal' : 
+                                  appType === 'app' ? 'Mobile App' : 'Both Platforms';
+                
+                alert(`B2B Promo "${promoCode}" created successfully!\n\n` +
+                      `Application: ${appTypeText}\n` +
+                      `Retailers: ${retailers.length > 3 ? retailers.slice(0, 3).join(', ') + '...' : retailers.join(', ')}`);
                 
                 // Reset form
                 document.getElementById('b2b-promo-name').value = '';
@@ -1296,6 +1627,7 @@
             document.getElementById('create-d2c-promo').addEventListener('click', function() {
                 const promoName = document.getElementById('d2c-promo-name').value;
                 const promoCode = document.getElementById('d2c-promo-code').value;
+                const appType = document.querySelector('input[name="d2c-app-type"]:checked').value;
                 
                 if (!promoName || !promoCode || selectedServices.size === 0) {
                     alert('Please fill in all required fields and select at least one service.');
@@ -1306,10 +1638,12 @@
                     type: 'D2C',
                     name: promoName,
                     code: promoCode,
+                    appType: appType,
                     promoType: document.getElementById('d2c-promo-type').value,
                     valueType: document.getElementById('d2c-value-type').value,
                     discountValue: document.getElementById('d2c-discount-value').value,
                     services: Array.from(selectedServices),
+                    products: selectedServices.has('ecom') ? Array.from(selectedProducts) : [],
                     country: document.getElementById('d2c-country').value,
                     states: Array.from(document.getElementById('d2c-state').selectedOptions).map(opt => opt.value),
                     userType: document.getElementById('d2c-user-type').value,
@@ -1326,28 +1660,43 @@
                 
                 console.log('D2C Promo Created:', formData);
                 
+                const appTypeText = appType === 'web' ? 'Website' : 
+                                  appType === 'app' ? 'Mobile App' : 'Both Platforms';
+                
                 let serviceNames = Array.from(selectedServices).map(s => {
                     const card = document.querySelector(`.service-card[data-service="${s}"]`);
                     return card ? card.querySelector('.service-name').textContent : s;
                 });
                 
-                alert(`D2C Promo "${promoCode}" created successfully!\n\nServices: ${serviceNames.join(', ')}\n\nNote: Full amount deducted from wallet, cashback credited after service completion.`);
+                let message = `D2C Promo "${promoCode}" created successfully!\n\n` +
+                             `Platform: ${appTypeText}\n` +
+                             `Services: ${serviceNames.join(', ')}\n\n`;
+                
+                if (selectedServices.has('ecom') && selectedProducts.size > 0) {
+                    const productCount = selectedProducts.size;
+                    message += `E-commerce Products: ${productCount} categories selected\n`;
+                }
+                
+                if (document.getElementById('free-delivery').checked) {
+                    message += `Free Delivery: Included\n`;
+                }
+                
+                message += `\nNote: Full amount deducted from wallet, cashback credited after service completion.`;
+                
+                alert(message);
                 
                 // Reset form
                 document.getElementById('d2c-promo-name').value = '';
                 document.getElementById('d2c-promo-code').value = '';
                 selectedServices.clear();
+                selectedProducts.clear();
                 serviceCards.forEach(card => card.classList.remove('selected'));
+                productItems.forEach(item => item.classList.remove('selected'));
                 document.getElementById('selected-services').value = '';
+                document.getElementById('select-all-products').checked = false;
+                ecomProductsSection.style.display = 'none';
                 deliverySection.style.display = 'none';
                 document.getElementById('free-delivery').checked = false;
-            });
-            
-            // Show delivery option only when e-commerce is selected
-            document.getElementById('d2c-promo-type').addEventListener('change', function() {
-                if (this.value === 'free_service' && selectedServices.has('ecom')) {
-                    deliverySection.style.display = 'block';
-                }
             });
         });
     </script>
